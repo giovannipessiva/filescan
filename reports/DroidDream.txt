@@ -1,0 +1,67 @@
+[Info]
+------
+File path:	/media/dati/Lavoro/Tesi/Tools/a-legit/single/2d486501dcf635a5ca58bb82d3dd3539329a276d.apk
+MD5:		3e95c3b8b5fbd61eef1d97d5ea48758f
+SHA1:		befc2d7fafbf17c0ac402c10efbd9f02d4caa651
+SHA256:		8bbe872b260c1d7564cff27a46c9d763452d8e833c08546f347c49372c22c1ff
+Duration:	2.145 s
+
+[Risk score]
+------
+Total risk score:	100
+InfectedDex risk:	0
+InfectedElf risk:	200
+HiddenApk:			1
+HiddenElf:			3
+HiddenText:			0
+EmbeddedApk risk:	1
+Shell risk:			0
+ShellInstall:		0
+ShellPrivilege:		0
+ShellOther:			0
+
+[Files types]
+------
+dex:	2
+android resource:	1
+text:	6
+multimedia:	6
+elf:	4
+unknown binary:	2
+android apk:	1
+android xml:	9
+
+[Embedded apk]
+------
+assets/sqlite.db
+
+[Infected files]
+------
+From http://www.team-cymru.org/Services/MHR:
+classes.dex:	0% detection rate
+assets/sqlite.db/classes.dex:	0% detection rate
+assets/profile:	0% detection rate
+assets/exploid:	0% detection rate
+assets/rageagainstthecage:	59% detection rate
+lib/armeabi/libandroidterm.so:	0% detection rate
+From known exploits:
+assets/exploid:	droiddream-exploid
+assets/rageagainstthecage:	droiddream-rageagainstthecage
+
+[Suspicious extensions]
+------
+assets/sqlite.db:	Zip archive data, at least v2.0 to extract
+assets/profile:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+assets/exploid:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+assets/rageagainstthecage:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+
+[Shell commands]
+------
+
+[Urls]
+------
+
+[Possible phone numbers]
+------
+assets/about.txt:	2009
+assets/about.txt:	2011

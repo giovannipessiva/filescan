@@ -1,0 +1,64 @@
+[Info]
+------
+File path:	/media/dati/Lavoro/Tesi/Tools/a-legit/single/03cbf9dc29bcc358eecf9b78ce618a83af686513.apk
+MD5:		e1ca28b4176e984ce948d148188b2e18
+SHA1:		03cbf9dc29bcc358eecf9b78ce618a83af686513
+SHA256:		4c1fd60477354eee08ac009b770f2bd04a560fcef3131f27f8ae008f37b64ca5
+Duration:	2.589 s
+
+[Risk score]
+------
+Total risk score:	100
+InfectedDex risk:	0
+InfectedElf risk:	100
+HiddenApk:			1
+HiddenElf:			2
+HiddenText:			0
+EmbeddedApk risk:	1
+Shell risk:			0
+ShellInstall:		0
+ShellPrivilege:		0
+ShellOther:			0
+
+[Files types]
+------
+dex:	2
+android resource:	2
+text:	4
+multimedia:	77
+elf:	3
+unknown binary:	3
+android apk:	1
+android xml:	27
+compressed archive:	1
+
+[Embedded apk]
+------
+assets/anserverb
+
+[Infected files]
+------
+From http://www.team-cymru.org/Services/MHR:
+classes.dex:	0% detection rate
+assets/anserverb/classes.dex:	0% detection rate
+assets/rageagainstthecage:	0% detection rate
+assets/busybox/(unknown):	0% detection rate
+lib/armeabi/libandroidterm.so:	0% detection rate
+From known exploits:
+assets/rageagainstthecage:	basebridge-rageagainstthecage
+
+[Suspicious extensions]
+------
+assets/anserverb:	Zip archive data, at least v2.0 to extract
+assets/busybox/(unknown):	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+assets/rageagainstthecage:	ELF 32-bit LSB executable, ARM, version 1 (SYSV)
+
+[Shell commands]
+------
+
+[Urls]
+------
+
+[Possible phone numbers]
+------
+META-INF/MANIFEST.MF:	6913

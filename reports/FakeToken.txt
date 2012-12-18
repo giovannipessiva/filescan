@@ -1,0 +1,56 @@
+[Info]
+------
+File path:	/media/dati/Lavoro/Tesi/Tools/a-legit/single/cgd.apk
+MD5:		fdbcdda67a7da854294036f256204121
+SHA1:		61025ad747b586ccbf58c382dc2864941c862fbf
+SHA256:		6ff1b1163881c4815142a1467b36a77db915bbac19484c380e9ecc48a0177ff5
+Duration:	0.603 s
+
+[Risk score]
+------
+Total risk score:	0
+InfectedDex risk:	0
+InfectedElf risk:	0
+HiddenApk:			0
+HiddenElf:			0
+HiddenText:			0
+EmbeddedApk risk:	0
+Shell risk:			0
+ShellInstall:		0
+ShellPrivilege:		0
+ShellOther:			0
+
+[Files types]
+------
+dex:	1
+android xml:	1
+unknown binary:	1
+android resource:	1
+text:	6
+multimedia:	13
+
+[Embedded apk]
+------
+
+[Infected files]
+------
+From http://www.team-cymru.org/Services/MHR:
+classes.dex:	0% detection rate
+
+[Suspicious extensions]
+------
+
+[Shell commands]
+------
+
+[Urls]
+------
+Encoded URLs:
+res/raw/settings.json:	http:\/\/funnymobi.ru
+
+[Possible phone numbers]
+------
+META-INF/ALARM.SF:	4058
+assets/html/index.html:	1999
+assets/html/index.html:	18650237
+res/raw/settings.json:	+79637142718
