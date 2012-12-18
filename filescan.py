@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-# FileScan, version 1.0.1
+# FileScan, version 1.1.0
 # Copyright (C) 2012, Giovanni Pessiva <giovanni.pessiva at gmail.com>
 # All rights reserved.
 #
@@ -31,14 +29,12 @@ import cStringIO
 
 from time import time
 from androguard.core import androconf
+from androguard.core.bytecodes.apk import ARSCParser
 
-ENABLE_RES_DUMP = True
-ENABLE_NET_CONNECTION = True
+ENABLE_NET_CONNECTION = False
 DEBUG_IGNORE_CMD = False
 DEBUG_IGNORE_URL = False
 DEBUG_IGNORE_SMS = False
-
-APKTOOL_PATH = "/home/giova/tools/filescan/apktool-mod.jar"
 
 INFECTED_DEX_RISK   = 0
 INFECTED_ELF_RISK   = 1
@@ -89,8 +85,6 @@ class FileScan :
         self.files_types_mime = {} # store file mime type
         self.files_compressed_filescan = {} # store FileScan objects
         
-        self.strings = "" #store raw data of the decompiled file /res/values/strings.xml
-        
         # Dictionary of <file type> : <count of total files>
         self.types = {}
         
@@ -118,6 +112,7 @@ class FileScan :
         self.filelist_gzip = []
         self.filelist_tar = []
         self.filelist_rar = []
+        self.filelist_arsc = []
         self.filelist_multimedia = []
         self.filelist_other = []    #file type known but not managed
         self.filelist_unknown = [] #file type unknown
@@ -192,7 +187,6 @@ class FileScan :
                         
         # Hashcodes of known infected binaries   
         self.known_infected_elf = {}
-        """
         self.known_infected_elf["c4269275058f4f5239b45db88257df38c7d6cca2"] = "asroot-asroot-1"
         self.known_infected_elf["a40181f2d912527af7371c490fbd36e48beb0d3f"] = "asroot-asroot-2"
         self.known_infected_elf["63cbf4dff428a6743191a63d70b4d83970d4ee43"] = "basebridge-rageagainstthecage"
@@ -204,7 +198,6 @@ class FileScan :
         self.known_infected_elf["f7db5b53aab5730351d23ccedaafa0bc776f08b6"] = "gingermaster-runme.png"
         self.known_infected_elf["b703df668e41a8cf5bad44edf1ac65c915e5fe41"] = "zHash-lootor-extend"
         self.known_infected_elf["28feffc93c1ec4e0cfd382b047a85c47dafec740"] = "zHash-lootor-zhash"
-        #"""
         
         # Lists of data found during analysis, and their source files
         self.urls = []
@@ -262,7 +255,6 @@ class FileScan :
             try :
                 if not raw :
                     zip = zipfile.ZipFile( file, mode="r" )
-                    self._decompile_resources(file)
                 else :
                     fileobj = StringIO.StringIO(file)
                     zip = zipfile.ZipFile( fileobj, mode="r" )
@@ -400,8 +392,12 @@ class FileScan :
                     
                     if extension == "arsc" :
                         # Compiled resources
-                        self.filelist_other.append(file_name)
-                        self._increment_type_count(self.TYPE_ARSC)
+                        self.filelist_arsc.append(file_name)
+                        # Decompile and save the strings values
+                        arscp = ARSCParser(file_raw)
+                        self.files[file_name] = arscp.get_strings_resources()
+                        self._increment_type_count(self.TYPE_ARSC)          
+                        
                     else :
                         # Unknown binary format
                         #print file_name,"->", mime_type, "/", mime_subtype, "--D-->", file_descr
@@ -522,25 +518,6 @@ class FileScan :
             
         else :
             raise Exception("Unexpected mime: "+mime_type+"/"+mime_subtype+" --> "+file_descr+" for file:"+file_name)
-            
-    def _decompile_resources(self, apk) :
-        
-        if ENABLE_RES_DUMP == False :
-            return
-        try :
-            FNULL = open('/dev/null', 'w')
-            p = subprocess.Popen("java -jar "+APKTOOL_PATH+" decode --no-src -f "+apk+" filescan-tmp/", stdout=subprocess.PIPE, stderr=FNULL, shell=True)
-            p.communicate()
-            FNULL.close()
-            STRINGS = open("filescan-tmp/res/values/strings.xml", 'r')
-            self.strings = STRINGS.read()
-            STRINGS.close()
-            shutil.rmtree("filescan-tmp/",True)
-            return
-        except OSError, e:
-            return
-        except Exception, e :
-            return
             
     def _scan_archives(self) :
         """
@@ -676,7 +653,10 @@ class FileScan :
                 self._analyze_file_readable(f)
                 
             for f in self.filelist_xml :
-                self._analyze_file_xml(f)     
+                self._analyze_file_xml(f)
+                
+            for f in self.filelist_arsc :
+                self._analyze_file_xml(f)  
             
         else :
             # Analyze only specified text files
@@ -687,10 +667,8 @@ class FileScan :
                         self._analyze_file_readable(file)
                     elif file in self.filelist_xml :
                         self._analyze_file_xml(file)
-                        
-        # If available, analyse the decompiled file strings.xml
-        if not self.strings == "" :
-            self._analyze_file_xml(self.strings,raw=True,strings=True)
+                    elif file in self.filelist_arsc :
+                        self._analyze_file_xml(file)  
           
         risks[SHELL_RISK] += self.script_count[SHELL_RISK]
         risks[SHELL_INSTALL_RISK] += self.script_count[SHELL_INSTALL_RISK]
@@ -764,14 +742,11 @@ class FileScan :
         if not DEBUG_IGNORE_SMS == True :
             self._search_sms(data, file)      
          
-    def _analyze_file_xml(self, file, raw=False, strings=False) :
+    def _analyze_file_xml(self, file, raw=False) :
         data = file
         if raw == False :
             data = self.files[file]
             
-        if strings == True :
-            file = "resources.arsc/res/values/strings.xml"
-
         if not DEBUG_IGNORE_URL == True :
             self._search_url(data, file)
         if not DEBUG_IGNORE_SMS == True :
