@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # FileScan, version 1.1.0
 # Copyright (C) 2012, Giovanni Pessiva <giovanni.pessiva at gmail.com>
 # All rights reserved.
@@ -31,7 +33,7 @@ from time import time
 from androguard.core import androconf
 from androguard.core.bytecodes.apk import ARSCParser
 
-ENABLE_NET_CONNECTION = False
+ENABLE_NET_CONNECTION = True
 DEBUG_IGNORE_CMD = False
 DEBUG_IGNORE_URL = False
 DEBUG_IGNORE_SMS = False
@@ -651,10 +653,8 @@ class FileScan :
             # Analyze every text file
             for f in self.filelist_text :
                 self._analyze_file_readable(f)
-                
             for f in self.filelist_xml :
-                self._analyze_file_xml(f)
-                
+                self._analyze_file_xml(f) 
             for f in self.filelist_arsc :
                 self._analyze_file_xml(f)  
             
