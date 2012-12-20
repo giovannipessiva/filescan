@@ -1,6 +1,13 @@
 ***********************************************************
 FileScan CHANGELOG
 ***********************************************************
+Version 1.1.1, 20/12/2012
+=============================
+- Removed the debug method export_system()
+- Modified the URL regex for a better detection of formatted parameters
+- Bugfix in the connection to the online analysis service
+
+=============================
 Version 1.1.0, 18/12/2012
 =============================
 - Androarsc used instead of apktool

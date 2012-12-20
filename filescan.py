@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# FileScan, version 1.1.0
+# FileScan, version 1.1.1
 # Copyright (C) 2012, Giovanni Pessiva <giovanni.pessiva at gmail.com>
 # All rights reserved.
 #
@@ -162,7 +162,7 @@ class FileScan :
         # resource path
         regex1 += r'(?:/('+accepted_chars+')+)?'
         
-        accepted_chars += r"|{[a-z0-9\.\-_~:\?#\[\]@!\$&\\\(\)\*\+=]+}"
+        accepted_chars += r"|{[a-z0-9\.\-_~:\?#\[\]@!\$&\\\(\)\*\+=]+}|(?:%[0-9]+\$[a-z0-9,\+\-(#]+)"
         
         # IP address dotted notation octets
         # excludes loopback network 0.0.0.0, reserved space >= 224.0.0.0, network & broacast addresses (first & last IP address of each class)
@@ -292,7 +292,7 @@ class FileScan :
             # Gzip archives contains a single file
             descr = magic_descr.from_buffer(uncompressed_file)
             mime = magic_mime.from_buffer(uncompressed_file)
-            self._classify_file(mime, descr, uncompressed_file, "(unknonw)")
+            self._classify_file(mime, descr, uncompressed_file, "(unknown)")
         elif type=="tar" :
             # Tar archive
             try:
@@ -654,7 +654,7 @@ class FileScan :
             for f in self.filelist_text :
                 self._analyze_file_readable(f)
             for f in self.filelist_xml :
-                self._analyze_file_xml(f) 
+                self._analyze_file_xml(f)
             for f in self.filelist_arsc :
                 self._analyze_file_xml(f)  
             
@@ -963,14 +963,10 @@ class FileScan :
         try :
             FNULL = open('/dev/null', 'w')
             p = subprocess.Popen("whois -h hash.cymru.com c4269275058f4f5239b45db88257df38c7d6cca2", stdout=subprocess.PIPE, stderr=FNULL, shell=True)
+            response = p.communicate()[0]
             FNULL.close()
-            if p.communicate()[0] == "" :
-                return False
-        except OSError, e:
-            print "OSError:", e
-            return False
-        except Exception, e :
-            print "Exception:",e
+            result = int(shlex.split(response)[2])
+        except :
             return False
         return True
     
@@ -985,15 +981,11 @@ class FileScan :
             if ENABLE_NET_CONNECTION == True :
                 try :
                     FNULL = open('/dev/null', 'w')
-                    p = subprocess.Popen("whois -h hash.cymru.com " + hash, stdout=subprocess.PIPE, stderr=FNULL, shell=True)                     
+                    p = subprocess.Popen("whois -h hash.cymru.com " + hash, stdout=subprocess.PIPE, stderr=FNULL, shell=True)
                     response = p.communicate()[0]
                     FNULL.close()
-                    result = shlex.split(response)[2]
-                    if result == "NO_DATA" or result == "" :
-                        result = 0
-                except OSError:
-                    result = 0
-                except Exception :
+                    result = int(shlex.split(response)[2])
+                except :
                     result = 0
             else :
                 result = 0
@@ -1016,16 +1008,12 @@ class FileScan :
                     p = subprocess.Popen("whois -h hash.cymru.com " + hash, stdout=subprocess.PIPE, stderr=FNULL, shell=True)
                     response = p.communicate()[0]
                     FNULL.close()
-                    result = shlex.split(response)[2]
-                    if result == "NO_DATA" or result == "" :
-                        result = 0
-                except OSError:
-                    result = 0
-                except Exception :
-                    result = 0
-                detection_rate[file] = result
+                    result = int(shlex.split(response)[2])
+                except :
+                    result = 0 
             else :
                 result = 0
+            detection_rate[file] = result
         return detection_rate
         
     def get_scripts(self) :
@@ -1253,43 +1241,6 @@ class FileScan :
 
     
 #################################RISK###########################################
-def export_system(self, system, directory) :
-    try :
-		from fuzzy.doc.plot.gnuplot import doc
-		import fuzzy.doc.structure.dot.dot
-    except ImportError :
-        error("please install pyfuzzy to use this module !")
-
-    d = doc.Doc(directory)
-    d.createDoc(system)
-  
-    for name,rule in system.rules.items():
-            cmd = "dot -T png -o '%s/fuzzy-Rule-%s.png'" % (directory,name)
-            f = subprocess.Popen(cmd, shell=True, bufsize=32768, stdin=subprocess.PIPE).stdin
-            fuzzy.doc.structure.dot.dot.print_header(f,"XXX")
-            fuzzy.doc.structure.dot.dot.print_dot(rule,f,system,"")
-            fuzzy.doc.structure.dot.dot.print_footer(f)
-    cmd = "dot -T png -o '%s/fuzzy-System.png'" % directory
-    f = subprocess.Popen(cmd, shell=True, bufsize=32768, stdin=subprocess.PIPE).stdin
-    fuzzy.doc.structure.dot.dot.printDot(system,f)
-
-    d.overscan=0
-    in_vars = [name for name,var in system.variables.items() if isinstance(var,fuzzy.InputVariable.InputVariable)]
-    out_vars = [name for name,var in system.variables.items() if isinstance(var,fuzzy.OutputVariable.OutputVariable)]
-    
-    if len(in_vars) == 2 and not (
-            isinstance(system.variables[in_vars[0]].fuzzify,fuzzy.fuzzify.Dict.Dict)
-        or
-            isinstance(system.variables[in_vars[1]].fuzzify,fuzzy.fuzzify.Dict.Dict)
-    ):
-        for out_var in out_vars:
-            args = []
-            if isinstance(system.variables[out_var].defuzzify,fuzzy.defuzzify.Dict.Dict):
-                for adj in system.variables[out_var].adjectives:
-                    d.create3DPlot_adjective(system, in_vars[0], in_vars[1], out_var, adj, {})
-            else:
-                d.create3DPlot(system, in_vars[0], in_vars[1], out_var, {})
-
 SYSTEM = None
 class RiskIndicator :
 
