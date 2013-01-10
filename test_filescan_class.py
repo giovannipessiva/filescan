@@ -30,7 +30,7 @@ def test(apk) :
         # Print the risk values in CSV notation
         string = "\""+os.path.basename(apk)+"\""
         string += ";"+file_scan.get_sha1()
-        string += ";"+str(round(analysis_time,3)) #.replace(".", ",")
+        string += ";"+str(round(analysis_time,3))
         string += ";"+str(file_scan.get_risk_score())
         string += ";"+str(risk_values[0])
         string += ";"+str(risk_values[1])
@@ -43,14 +43,13 @@ def test(apk) :
         string += ";"+str(risk_values[8])
         string += ";"+str(risk_values[9])
         print string
-        #"""
  
  
         """#####################################################################
-		# Print a complete report
+        # Print a complete report
         file_scan.report()
-		
-		# Print the report to a file
+        
+        # Print the report to a file
         report_file = open("/home/giova/tools/filescan/reports/" + file_scan.get_sha1() + ".filescan.txt",'w')
         file_scan.report(report_file)
         report_file.close()
@@ -91,21 +90,26 @@ def test(apk) :
         # Query the Hash Malware Registry (http://www.team-cymru.org/Services/MHR/)
         # and show the detection rate for every dex and elf file
         print "HMR DETECTION RATES"
-        for file,result in file_scan.get_dex_detection_rate().iteritems() :
+        for file,result in file_scan.get_detection_rate(file_scan.get_dex_checksum()).iteritems() :
             print "   >", "DEX Detection rate for %s = %s%%" %(file, result)
-        for file,result in file_scan.get_elf_detection_rate().iteritems() :
+        for file,result in file_scan.get_detection_rate(file_scan.get_elf_checksum()).iteritems() :
             print "   >", "ELF Detection rate for %s = %s%%" %(file, result)
             
         # Print a list of known malicious binary files (ELF)
-        files = file_scan.get_elf_infected()
+        files = file_scan.get_elf_infected(file_scan.get_elf_checksum())
         if not len(files)==0 :
             print "KNOWN MALWARE"
         for file,malware in files.iteritems() :
             print "   >", file, "is:", malware
             
         # Print a list of the interesting files with changed extension
-        print "SUSPICIOUS EXTENSIONS"
-        for file,descr in file_scan.suspicious_extensions().iteritems() :
+        print "SUSPECT EXTENSIONS"
+        suspect = file_scan.get_suspect_files()
+        for file,descr in suspect["apk"].iteritems() :
+            print "   > " + file + " -> " + descr
+        for file,descr in suspect["elf"].iteritems() :
+            print "   > " + file + " -> " + descr
+        for file,descr in suspect["txt"].iteritems() :
             print "   > " + file + " -> " + descr
             
         # Print a list of file which contains shell commands, and the commands found inside them
@@ -140,7 +144,7 @@ def test(apk) :
         for apk in file_scan.get_apk() :
             print "   >", apk      
              
-        # Print the checksum (computed with 6 different hash functions) for every dex file
+        # Print the checksum (computed with 6 different hash functions) for every DEX file
         print "DEX CHECKSUMS"
         dex_md5 = file_scan.get_dex_checksum("md5");
         dex_sha1 = file_scan.get_dex_checksum("sha1");
@@ -157,7 +161,7 @@ def test(apk) :
             print "   >", " SHA384:", dex_sha384[file]
             print "   >", " SHA512:", dex_sha512[file]
         
-        # Print the checksum (computed with 6 different hash functions) for every elf file
+        # Print the checksum (computed with 6 different hash functions) for every ELF file
         print "ELF CHECKSUMS"
         elf_md5 = file_scan.get_elf_checksum("md5");
         elf_sha1 = file_scan.get_elf_checksum("sha1");
@@ -175,7 +179,7 @@ def test(apk) :
             print "   >", " SHA512:", elf_sha512[file]
             
         # Print a list of file which contains URLs, and the URLs found inside them
-        urls, domains, urls_files = file_scan.get_urls(show_files=True)
+        urls, domains, urls_files = file_scan.get_urls()
         if not len(urls)==0 :
             print "URLS BY FILES"
         i = 0
@@ -184,7 +188,7 @@ def test(apk) :
             i+=1
             
         # Print a list of file which contains encoded URLs, and the URLs found inside them
-        urls, domains, urls_files = file_scan.get_urls_encoded(show_files=True)
+        urls, domains, urls_files = file_scan.get_urls_encoded()
         if not len(urls)==0 :
             print "URLS BY FILES"
         i = 0

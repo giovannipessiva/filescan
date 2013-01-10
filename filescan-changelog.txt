@@ -1,6 +1,22 @@
 ***********************************************************
 FileScan CHANGELOG
 ***********************************************************
+Version 1.2.1, 07/01/2013
+=============================
+- Bugfix in the _scan_archive() recursion
+- Bugfix in the get_dex/elf_checksum recursion
+
+=============================
+Version 1.2.0, 04/01/2013
+=============================
+- Bugfix in the get_files_list() method
+- The debug flags are now parameters of FileScan 
+- Added a FileScan parameter to export embedded apk
+- Removed the possibility to analyse only specific files
+  defined in an external file
+- Various changes to clean the code
+
+=============================
 Version 1.1.1, 20/12/2012
 =============================
 - Removed the debug method export_system()
