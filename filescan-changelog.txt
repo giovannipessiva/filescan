@@ -1,7 +1,12 @@
 ***********************************************************
 FileScan CHANGELOG
 ***********************************************************
-Version 1.2.1, 07/01/2013
+Version 1.2.2, 11/01/2013
+=============================
+- Removed a debug print
+
+=============================
+Version 1.2.1, 10/01/2013
 =============================
 - Bugfix in the _scan_archive() recursion
 - Bugfix in the get_dex/elf_checksum recursion

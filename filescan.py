@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# FileScan, version 1.2.1
+# FileScan, version 1.2.2
 # Copyright (C) 2012, Giovanni Pessiva <giovanni.pessiva at gmail.com>
 # All rights reserved.
 #
@@ -536,7 +536,6 @@ class FileScan :
         """
         self.analysis_time = 0
         start = time()
-        
         risks = {
             INFECTED_DEX_RISK    : 0,
             INFECTED_ELF_RISK    : 0,
@@ -583,7 +582,6 @@ class FileScan :
                 result = 100
             if result > 0 :
                 risks[INFECTED_ELF_RISK] += int(result)
-                print file, result
         for file,result in self.get_detection_rate(self._dex_checksum()).iteritems() :
             risks[INFECTED_DEX_RISK] += int(result)
             
